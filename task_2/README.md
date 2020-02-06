@@ -35,6 +35,10 @@
 - node.master: "{{ master }}"  
 является ли нода master-нодой
 
-
 ## PS:
-Примеры того, что я делал на Ansible, можно посмотреть тут: https://github.com/migrulos/devops-practice/tree/master/ansible
+В случае, если с целевых хостов нет выхода в интернет, а есть только с хоста, на котором выполняется ansible (при этом доступ осуществляется через корпоративный прокси сервер), для работы playbook нужно будет указать в нём прокси-сервер (как описано здесь: https://docs.ansible.com/ansible/latest/user_guide/playbooks_environment.html):  
+-  environment:  
+     http_proxy: http://proxy.example.com:8080
+
+## PPS:
+Примеры других моих работ с использованием Ansible можно посмотреть тут: https://github.com/migrulos/devops-practice/tree/master/ansible
