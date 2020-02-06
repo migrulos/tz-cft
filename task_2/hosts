@@ -1,0 +1,15 @@
+---
+es_cluster:
+  hosts:
+    node-0:
+      ansible_host: 34.90.164.126
+      master: true
+      data: false
+    node-1:
+      ansible_host: 34.90.107.37
+      master: false
+      data: true
+    node-2:
+      ansible_host: 34.90.135.161
+      master: false
+      data: true

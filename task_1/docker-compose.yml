@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+    # base image of elasticsearch is centos:7, so we can use curl for healthcheck
+    healthcheck:
+      test: curl -f http://localhost:9200 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  one-shot-python:
+    build: ./one-shot-python
+    container_name: ospy
+    networks:
+      - elastic
+    depends_on:
+      - elasticsearch
+    # we need wait-for-it.sh (https://github.com/vishnubob/wait-for-it) to be shure that one-shot-python will run only when ES is really up
+    # recommended by DockerDocs https://docs.docker.com/compose/startup-order/
+    # python params: script-name, es-dns-name, port, index-name, json-file
+    command: ["/app/wait-for-it.sh", "elasticsearch:9200", "--timeout=60", "--", "python", "/app/one-shot-python.py", "elasticsearch", "9200", "shakespeare", "shakespeare_data.json"]
+
+volumes:
+  es_data:
+
+networks:
+  elastic:

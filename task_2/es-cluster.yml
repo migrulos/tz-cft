@@ -1,0 +1,14 @@
+- hosts: es_cluster
+  roles:
+    - role: elastic.elasticsearch
+  vars:
+    es_config:
+      cluster.name: "test-cluster"
+      node.name: "{{ inventory_hostname }}"
+      cluster.initial_master_nodes: "node-0"
+      discovery.seed_hosts: "node-0:9300, node-1:9300, node-2:9300"
+      network.host: "0.0.0.0"
+      http.port: 9200
+      transport.tcp.port: 9300
+      node.data: "{{ data }}"
+      node.master: "{{ master }}"
